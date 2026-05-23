@@ -45,27 +45,53 @@ int main(){
     //初始化建堆
     int heap_size=(n>m)?m:n;
     Buildheap(heap_size,heap);
-
+    int total=heap_size;//total=活跃的加保存在下一轮的
     int current=heap[1];
     int first=1;
 
     //开始一边输出一边判断读入
-    while(heap_index<=n||heap_size>0){
+    while(total>0){//内存数据还没完全输入完或者活跃排序部分的外存还有多
+
         if(heap_size==0){
-            heap_size=m;
+            printf("\n");
+            heap_size=total;//全程可以保证total小于等于m
             first=1;
-            current=heap[1];
+            Buildheap(heap_size,heap);
         }//开始下一轮
+        current=heap[1];
         //开始输出fisrt one
         if(first==1){
-            printf("%d ",current);
+            printf("%d",current);
             first=0;
         }else{
-            printf("%d",current);
+            printf(" %d",current);
         }
 
-        //读入下一个
-        
+        //读入下一个 分成两种情况 一个是input里还有数据可以读入 还有一个是input里没有数据可以读入但是heap的活跃数组还有数据可以输出
+        int last_out=current;
+        if(heap_index<=n){
+            int next_in=input[heap_index++];
+            if(next_in>=last_out){
+                heap[1]=next_in;
+                siftdown(1,heap,heap_size);
+            }else{
+                heap[1]=heap[heap_size];
+                heap[heap_size]=next_in;
+                heap_size--;
+                siftdown(1,heap,heap_size);
+            }
+        }else{
+            heap[1]=heap[heap_size];
+            for(i=heap_size+1;i<=total;i++){
+                heap[i-1]=heap[i];
+            }
+            heap_size--;
+            total--;
+            siftdown(1,heap,heap_size);
+        }
     }
+    printf("\n");
+    free(input);
+    free(heap);
     return 0;
 }
