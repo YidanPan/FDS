@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 20005
+
 typedef struct Node{
     int id;
     struct Node* pre;
@@ -91,11 +92,10 @@ void print(queue* q){
         if(first==1){
             first=0;
             printf("%d",temp->id);
-            temp=temp->next;
         }else{
             printf(" %d",temp->id);
-            temp=temp->next;
         }
+        temp=temp->next;
     }
     printf("\n");
 }
